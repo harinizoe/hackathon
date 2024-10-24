@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        .back-button {
+            position: absolute;
+            top: 20px;  
+            right: 20px; 
+            padding: 10px 15px;
+            background-color: #007BFF; 
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3; 
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
+       
+    </style>
+</head>
+<body>
+    <a href="{{ url_for('frontpage') }}" class="back-button">Back</a>
+    
+    <h1>Admin Dashboard</h1>
+
+    
+
+   
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Category</th>
+                    <th>Address</th>
+                    <th>Description</th>
+                    <th>Geotag Image</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category, issues in categorized_issues.items() %}
+                    <tr>
+                        <td colspan="7"><strong>{{ category }}</strong></td>
+                    </tr>
+                    {% for issue in issues %}
+                    <tr>
+                        <td>{{ issue.name }}</td>
+                        <td>{{ issue.email }}</td>
+                        <td>{{ issue.issue_category }}</td>
+                        <td>{{ issue.address }}</td>
+                        <td>{{ issue.description }}</td>
+                        <td>
+                            {% if issue.geotagImage_id %}
+                            <a href="{{ url_for('get_image', image_id=issue.geotagImage_id) }}">View Image</a>
+                            {% else %}
+                            No Image
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ url_for('update_status', issue_id=issue._id) }}">
+                                <select name="status">
+                                    <option value="reported" {% if issue.status == 'reported' %}selected{% endif %}>Reported</option>
+                                    <option value="in-progress" {% if issue.status == 'in-progress' %}selected{% endif %}>In Progress</option>
+                                    <option value="resolved" {% if issue.status == 'resolved' %}selected{% endif %}>Resolved</option>
+                                </select>
+                                <button type="submit">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+   
+
+    
+</body>
+</html>

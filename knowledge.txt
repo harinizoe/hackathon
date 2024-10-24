@@ -1,0 +1,68 @@
+1. Overview of Urban Maintenance Notifier
+What is the Urban Maintenance Notifier?
+A platform designed to report and manage urban maintenance issues such as streetlights, sewage blockages, waste disposal, etc.
+Purpose of the Platform
+To streamline the reporting process for citizens and improve urban maintenance management.
+2. How to Use the Platform
+Creating an Account
+Users must sign up with their email and a password.
+Option for social media login (if applicable).
+Reporting an Issue
+Step-by-step instructions on how to report an issue.
+Required fields: Name, Email, Issue Category, Address, Description, and optional Image Upload.
+Viewing Reported Issues
+How users can track the status of their reports.
+Information on updates and notifications.
+3. Issue Categories
+Available Categories:
+Sewage Blockage: Report issues related to blocked sewage systems.
+Streetlight Issues: For malfunctioning or damaged streetlights.
+Waste Disposal: Issues with garbage collection or littering.
+Road management: Report potholes on roads.
+Others: For any other maintenance-related issues not covered above.
+4. Status Updates
+Understanding Statuses:
+Reported: The issue has been logged.
+In Progress: The issue is currently being addressed.
+Resolved: The issue has been fixed and closed.
+5. Admin Dashboard Features
+Accessing the Admin Dashboard
+How admins can log in and manage reported issues.
+Managing Reports
+Instructions for filtering issues by category or status.
+How to update the status of a report.
+Viewing Images
+How to access and view uploaded images related to issues.
+6. Frequently Asked Questions (FAQs)
+What should I do if I can’t find my report?
+Instructions on checking status or resubmitting.
+How long does it take to resolve an issue?
+General timeline expectations for common issues.
+Who do I contact for urgent issues?
+Contact information for urgent maintenance issues (e.g., emergency services).
+7. Feedback and Support
+How to Provide Feedback
+Instructions on providing feedback about the platform or services.
+Contacting Support
+Email or contact form information for further inquiries or support.
+Example Q&A Pairs for the Chatbot
+Here are some example question-and-answer pairs that you can use to populate the chatbot's knowledge base:
+
+Q: What is the Urban Maintenance Notifier?
+
+A: The Urban Maintenance Notifier is a platform designed to help residents report and manage urban maintenance issues such as streetlights, sewage blockages, and waste disposal.
+Q: How do I report an issue?
+
+A: To report an issue, sign up or log in, navigate to the reporting section, fill out the required fields, and submit your report.
+Q: What categories can I report issues under?
+
+A: You can report issues under categories like Sewage Blockage, Streetlight Issues, Waste Disposal, Potholes, Graffiti, and Others.
+Q: How can I check the status of my report?
+
+A: You can check the status of your report by logging into your account and navigating to the "My Reports" section.
+Q: What does each status mean?
+
+A: "Reported" means your issue is logged, "In Progress" indicates it's being addressed, and "Resolved" means the issue has been fixed.
+Q: How can I provide feedback about the platform?
+
+A: You can provide feedback by contacting us via email or using the feedback form available on our website.

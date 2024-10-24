@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static',filename='styles.css')}}">
+    <title>Report an Issue</title>
+</head>
+<body>
+    <a href="{{ url_for('frontpage') }}" class="back-button">Back</a>
+
+    <h1>Report an Issue</h1>
+    <form id="issueForm">
+        <label for="name">Name:</label>
+        <input type="text" name="name" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" required><br><br>
+
+        <label for="issue_category">Issue Category:</label>
+        <select name="issue_category" required>
+            <option value="road_damage">Road Damage</option>
+            <option value="streetlight_problem">Streetlight Problem</option>
+            <option value="water_leakage">Water Leakage</option>
+            <option value="waste_management">Waste Management</option>
+            <option value="Sewage Blockage">Sewage Blockage</option>
+            <option value="Others">Others</option>
+        </select><br><br>
+
+        <label for="address">Address:</label>
+        <input type="text" name="address" required><br><br>
+
+        <label for="description">Description:</label>
+        <textarea name="description" required></textarea><br><br>
+
+        <label for="geotagImage">Geotag Image:</label>
+        <input type="file" name="geotagImage" accept="image/*"><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="response"></div>
+    <script>
+        document.getElementById('issueForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/report-issue', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === "success") {
+                    this.reset();  // Reset the form
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+    
+</body>
+</html>

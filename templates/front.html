@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance Issue Reporting Platform</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='front.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Styles for the chatbot iframe */
+        .chatbot-container {
+            position: fixed;
+            bottom: 70px; /* Adjust to fit the button */
+            right: 20px;
+            width: 300px; /* Adjust width as needed */
+            height: 400px; /* Adjust height as needed */
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000; /* Ensure it's on top of other elements */
+            display: none; /* Initially hidden */
+        }
+
+        /* Back button styles */
+        .back-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Chatbot toggle button styles */
+        .chatbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px; /* Adjust size as needed */
+            height: 60px; /* Adjust size as needed */
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%; /* Round button */
+            font-size: 24px; /* Adjust icon size */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000; /* Ensure it's on top of other elements */
+        }
+
+        .chatbot-toggle:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">Urban Maintenance System</h1>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#values">Our Values</a></li>
+                        <li><a href="#" id="helpButton">Contact Us</a></li>
+                        <li>
+                            <a href="#" id="adminButton" class="cta-button-2">Admin</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div id="passwordModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0, 0, 0, 0.5); z-index:1000;">
+        <div style="position:relative; margin:15% auto; padding:20px; background:#fff; width:300px; border-radius:5px;">
+            <h2>Enter Admin Password</h2>
+            <input type="password" id="adminPassword" placeholder="Password" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ccc; border-radius:5px;">
+            <button id="submitPassword" style="padding:10px 15px; background:#007BFF; color:white; border:none; border-radius:5px; cursor:pointer;">Submit</button>
+            <button id="closeModal" style="padding:10px 15px; background:#ccc; color:black; border:none; border-radius:5px; cursor:pointer; margin-left:10px;">Cancel</button>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById("adminButton").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent the default action of the link
+            document.getElementById("passwordModal").style.display = "block"; // Show modal
+        });
+    
+        document.getElementById("closeModal").addEventListener("click", function() {
+            document.getElementById("passwordModal").style.display = "none"; // Close modal
+        });
+    
+        document.getElementById("submitPassword").addEventListener("click", function() {
+            const password = document.getElementById("adminPassword").value;
+    
+            // Check if the password is correct
+            if (password === "KecItians123") {
+                window.location.href = "{{ url_for('admin') }}"; // Redirect to admin page
+            } else {
+                alert("Invalid password!"); // Show error message
+            }
+        });
+    </script>
+    
+    
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h2>Welcome to the Maintenance Issue Reporting Platform</h2>
+            <a href="{{url_for('report')}}" class="cta-button">Report an Issue Now</a>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section id="values" class="values-section">
+        <div class="container">
+            <h2>Our Values</h2>
+            <div class="values">
+                <div class="value">
+                    <img src="static/images/easy-reporting.webp" alt="Easy Reporting">
+                    <h3>Easy Reporting</h3>
+                    <p>Report issues in just a few clicks. Simply provide details, location, and upload a picture.</p>
+                </div>
+                <div class="value">
+                    <img src="static/images/fast-response.webp" alt="Fast Response">
+                    <h3>Fast Response</h3>
+                    <p>Our platform ensures that local authorities receive your reports in real-time for a quick resolution.</p>
+                </div>
+                <div class="value">
+                    <img src="static/images/transparency.webp" alt="Transparency">
+                    <h3>Transparency</h3>
+                    <p>Track the status of your reports and stay updated with any developments.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works-section">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="img">
+                    <img src="static/images/report-issue.png" alt="Report an Issue">
+                    </div>
+                    <h3>Step 1: Report an Issue</h3>
+                    <p>Provide the necessary details like category, location, and a description of the issue.</p>
+                </div>
+                <div class="step">
+                    <img src="static/images/location.jpg" alt="Location">
+                    <h3>Step 2: Specify Location</h3>
+                    <p>Enter the address or nearest landmark, or simply upload a geotagged picture.</p>
+                </div>
+                <div class="step">
+                    <img src="static/images/resolve.jpg" alt="Resolve">
+                    <h3>Step 3: Get it Resolved</h3>
+                    <p>Local authorities will be notified immediately and will start working on resolving the issue.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Us Section -->
+    <!-- Modal -->
+    <div id="supportModal" class="modal hidden">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h2>Help & Support</h2>
+                <button id="closeModal" class="close-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Emergency Alert -->
+            <div id="emergencyAlert" class="alert-container">
+                <div class="alert">
+                    <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <div class="alert-content">
+                        <h3 class="alert-title">Emergency Contact</h3>
+                        <p class="alert-description">
+                            For any emergencies, please call our helpline:
+                            <span class="bold">1-800-986754</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <div class="tabs">
+                    <button id="contactTab" class="tab active" data-tab="contact">Contact Support</button>
+                    <button id="faqTab" class="tab" data-tab="faq">FAQ</button>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="content-container">
+                <!-- Contact Content -->
+                <div id="contactContent" class="tab-content active">
+                    <div class="contact-grid">
+                        <!-- Email Support -->
+                        <div class="contact-card">
+                            <div class="contact-header">
+                                <svg class="contact-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                                </svg>
+                                <h3>Email Support</h3>
+                            </div>
+                            <p class="response-time">Response within 24 hours</p>
+                            <a href="mailto:support@urbanmaintenance.com" class="contact-link">
+                                support@urbanmaintenance.com
+                            </a>
+                        </div>
+
+                        <!-- Phone Support -->
+                        <div class="contact-card">
+                            <div class="contact-header">
+                                <svg class="contact-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                </svg>
+                                <h3>Phone Support</h3>
+                            </div>
+                            <p class="response-time">Available Mon-Fri, 9AM-5PM</p>
+                            <a href="tel:1-800-MAINTAIN" class="contact-link">1-800-985432</a>
+                        </div>
+                    </div>
+
+                    <!-- Support Hours -->
+                    <div class="support-hours">
+                        <div class="hours-header">
+                            <svg class="hours-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            <h3>Support Hours</h3>
+                        </div>
+                        <ul class="hours-list">
+                            <li>Monday - Friday: 9:00 AM - 5:00 PM</li>
+                            <li>Saturday: 10:00 AM - 2:00 PM</li>
+                            <li>Sunday: Closed (Emergency support only)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- FAQ Content -->
+                <div id="faqContent" class="tab-content hidden">
+                    <div id="faqContainer" class="faq-container">
+                        <!-- FAQs will be inserted here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <button class="back-button" onclick="window.location.href='/'">Back</button>
+
+    <!-- Chatbot iframe -->
+    <iframe class="chatbot-container" id="chatbot" src="https://aichatbot.sendbird.com/playground/index.html?app_id=9C62B77B-5137-43F4-BC1C-BE020D77ECF8&bot_id=onboarding_bot&region=ap-8" title="Chatbot"></iframe>
+
+    <!-- Chatbot toggle button -->
+    <button class="chatbot-toggle" id="toggleButton" onclick="toggleChatbot()">
+        <i class="fas fa-comments chatbot-icon"></i> 
+    </button>
+
+    <script>
+        function toggleChatbot() {
+            var chatbot = document.getElementById("chatbot");
+            if (chatbot.style.display === "none" || chatbot.style.display === "") {
+                chatbot.style.display = "block"; 
+            } else {
+                chatbot.style.display = "none";
+            }
+        }
+        const faqs = [
+    {
+        question: "How do I report an urgent maintenance issue?",
+        answer: "For urgent issues, use the 'Urgent' category when submitting your report. Our team monitors urgent reports 24/7 and responds within 2 hours. For immediate emergencies, please call our hotline."
+    },
+    {
+        question: "What information should I include in my report?",
+        answer: "Please include: detailed description of the issue, exact location (address/landmark), clear photos, and your contact information. The more details you provide, the faster we can address the problem."
+    },
+    {
+        question: "How long does it take to resolve reported issues?",
+        answer: "Resolution times vary based on the issue type and severity. Urgent issues are addressed within 24 hours, while non-urgent matters typically take 3-5 business days. You'll receive updates on your report's status."
+    }
+];
+
+// DOM Elements
+const helpButton = document.getElementById('helpButton');
+const supportModal = document.getElementById('supportModal');
+const closeModal = document.getElementById('closeModal');
+const contactTab = document.getElementById('contactTab');
+const faqTab = document.getElementById('faqTab');
+const contactContent = document.getElementById('contactContent');
+const faqContent = document.getElementById('faqContent');
+const faqContainer = document.getElementById('faqContainer');
+
+// Initialize FAQ Content
+function initializeFAQs() {
+    faqContainer.innerHTML = faqs.map((faq, index) => `
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFAQ(${index})">
+                <span>${faq.question}</span>
+                <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+            <div class="faq-answer hidden" id="faq-answer-${index}">
+                ${faq.answer}
+            </div>
+        </div>
+    `).join('');
+}
+
+// Toggle FAQ Answer
+function toggleFAQ(index) {
+    const answer = document.getElementById("faq-answer-${index}");
+    const question = answer.previousElementSibling;
+    const chevron = question.querySelector('.chevron-icon');
+    
+    // Close all other FAQs
+    document.querySelectorAll('.faq-answer').forEach((el, i) => {
+        if (i !== index) {
+            el.classList.add('hidden');
+            el.previousElementSibling.querySelector('.chevron-icon').classList.remove('up');
+        }
+    });
+
+    // Toggle current FAQ
+    answer.classList.toggle('hidden');
+    chevron.classList.toggle('up');
+}
+
+// Tab Switching
+function switchTab(tabId) {
+    // Remove active class from all tabs and contents
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    
+    // Add active class to selected tab and content
+    if (tabId === 'contact') {
+        contactTab.classList.add('active');
+        contactContent.classList.add('active');
+        contactContent.classList.remove('hidden');
+        faqContent.classList.add('hidden');
+    } else {
+        faqTab.classList.add('active');
+        faqContent.classList.add('active');
+        faqContent.classList.remove('hidden');
+        contactContent.classList.add('hidden');
+    }
+}
+
+// Event Listeners
+helpButton.addEventListener('click', () => {
+    supportModal.classList.remove('hidden');
+});
+
+closeModal.addEventListener('click', () => {
+    supportModal.classList.add('hidden');
+});
+
+// Close modal when clicking outside
+supportModal.addEventListener('click', (e) => {
+    if (e.target === supportModal) {
+        supportModal.classList.add('hidden');
+    }
+});
+
+// Tab click handlers
+contactTab.addEventListener('click', () => switchTab('contact'));
+faqTab.addEventListener('click', () => switchTab('faq'));
+
+// Prevent modal close when clicking modal content
+document.querySelector('.modal-content').addEventListener('click', (e) => {
+    e.stopPropagation();
+});
+
+// Initialize FAQs when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    initializeFAQs();
+});
+
+// Handle escape key to close modal
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !supportModal.classList.contains('hidden')) {
+        supportModal.classList.add('hidden');
+    }
+});
+    </script>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Issue Reporting Platform. All rights reserved.</p>
+        </div>
+    </footer>
+    
+</body>
+</html>
